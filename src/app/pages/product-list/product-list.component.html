@@ -1,0 +1,56 @@
+<div class="products-page">
+  <div class="page-header">
+    <h1>Our Collection 👕</h1>
+    <p>Premium men's & women's clothing</p>
+    <input
+      type="text"
+      [(ngModel)]="searchTerm"
+      placeholder="🔍 Search products..."
+      class="search-input"
+    />
+  </div>
+
+  <!-- Loading -->
+  <div class="loading" *ngIf="loading">
+    <p>Loading products...</p>
+  </div>
+
+  <!-- Error -->
+  <div class="no-products" *ngIf="!loading && errorMsg">
+    <p>{{ errorMsg }}</p>
+  </div>
+
+  <!-- No results -->
+  <div class="no-products" *ngIf="!loading && !errorMsg && filteredProducts.length === 0">
+    <p>No products found 😔</p>
+  </div>
+
+  <!-- Products Grid -->
+  <div class="products-grid" *ngIf="!loading && filteredProducts.length > 0">
+    <div class="product-card" *ngFor="let product of filteredProducts">
+      <div class="product-image">
+        <img
+          [src]="product.imageUrl || 'https://placehold.co/300x300?text=Product'"
+          [alt]="product.name"
+        />
+        <span class="badge" *ngIf="product.stock < 10">Only {{product.stock}} left!</span>
+      </div>
+      <div class="product-info">
+        <span class="brand">{{ product.brand }}</span>
+        <h3>{{ product.name }}</h3>
+        <p class="description">{{ product.description }}</p>
+        <div class="product-footer">
+          <span class="price">₹{{ product.price }}</span>
+          <div class="actions">
+            <button class="btn-cart" (click)="addToCart(product)">
+              🛒 Add
+            </button>
+            <button class="btn-view" [routerLink]="['/products', product.id]">
+              View
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

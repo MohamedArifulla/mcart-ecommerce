@@ -1,0 +1,98 @@
+<div class="checkout-page">
+
+  <!-- Success -->
+  <div class="success-screen" *ngIf="orderPlaced">
+    <div class="success-icon">🎉</div>
+    <h2>Order Placed Successfully!</h2>
+    <p>Redirecting to your orders...</p>
+  </div>
+
+  <div class="checkout-container" *ngIf="!orderPlaced">
+    <h1>Checkout 📦</h1>
+
+    <div class="checkout-grid">
+      <!-- Address Form -->
+      <div class="address-section">
+        <h2>Shipping Address</h2>
+
+        <div class="form-group">
+          <label>Street Address</label>
+          <input type="text" [(ngModel)]="address.street" placeholder="123 Main Street" />
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label>City</label>
+            <input type="text" [(ngModel)]="address.city" placeholder="Chennai" />
+          </div>
+          <div class="form-group">
+            <label>State</label>
+            <input type="text" [(ngModel)]="address.state" placeholder="Tamil Nadu" />
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label>Pincode</label>
+            <input type="text" [(ngModel)]="address.pincode" placeholder="600001" maxlength="6" />
+          </div>
+          <div class="form-group">
+            <label>Phone</label>
+            <input type="text" [(ngModel)]="address.phone" placeholder="9876543210" maxlength="10" />
+          </div>
+        </div>
+
+        <div class="payment-section">
+          <h2>Payment Method</h2>
+          <div class="payment-option selected">
+            <span>💵</span>
+            <span>Cash on Delivery</span>
+            <span class="check">✓</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Order Summary -->
+      <div class="order-summary">
+        <h2>Order Summary</h2>
+
+        <div class="order-items">
+          <div class="order-item" *ngFor="let item of cartItems">
+            <span class="item-name">{{ item.name }} × {{ item.quantity }}</span>
+            <span class="item-price">₹{{ (item.price * item.quantity).toFixed(2) }}</span>
+          </div>
+        </div>
+
+        <div class="divider"></div>
+
+        <div class="summary-row">
+          <span>Items ({{ itemCount }})</span>
+          <span>₹{{ cartService.getTotalAmount().toFixed(2) }}</span>
+        </div>
+        <div class="summary-row" *ngIf="cartService.getTotalAmount() > 1000">
+          <span>Discount (10%)</span>
+          <span class="green">- ₹{{ (cartService.getTotalAmount() * 0.1).toFixed(2) }}</span>
+        </div>
+        <div class="summary-row">
+          <span>Shipping</span>
+          <span class="green">FREE</span>
+        </div>
+
+        <div class="divider"></div>
+
+        <div class="summary-total">
+          <span>Total</span>
+          <span>₹{{ total.toFixed(2) }}</span>
+        </div>
+
+        <div class="error-msg" *ngIf="errorMsg">{{ errorMsg }}</div>
+
+        <button class="btn-order" (click)="placeOrder()" [disabled]="loading">
+          {{ loading ? 'Placing Order...' : '✅ Place Order' }}
+        </button>
+
+        <a routerLink="/cart" class="btn-back">← Back to Cart</a>
+      </div>
+    </div>
+  </div>
+</div>
