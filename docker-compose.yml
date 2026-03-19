@@ -1,0 +1,43 @@
+services:
+  postgres:
+    image: postgres:15-alpine
+    environment:
+      POSTGRES_DB: mcart
+      POSTGRES_USER: mcart_user
+      POSTGRES_PASSWORD: mcart_pass
+      POSTGRES_HOST_AUTH_METHOD: trust
+    ports:
+      - "5433:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U mcart_user -d mcart"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  backend:
+    build: ./backend
+    ports:
+      - "3001:3000"    # ✅ 3001 use pannunga — conflict avoid
+    environment:
+      DB_HOST: postgres
+      DB_PORT: 5432
+      DB_USERNAME: mcart_user
+      DB_PASSWORD: mcart_pass
+      DB_NAME: mcart
+      JWT_SECRET: mcart_super_secret_key
+      NODE_ENV: production
+    depends_on:
+      postgres:
+        condition: service_healthy
+
+  frontend:
+    build: ./frontend
+    ports:
+      - "8080:80"
+    depends_on:
+      - backend
+
+volumes:
+  postgres_data:
