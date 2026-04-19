@@ -1,0 +1,80 @@
+<div class="cart-page">
+  <h1>Shopping Cart 🛒</h1>
+
+  <!-- Empty Cart -->
+  <div class="empty-cart" *ngIf="cartItems.length === 0">
+    <div class="empty-icon">🛒</div>
+    <h2>Your cart is empty!</h2>
+    <p>Add some products to get started</p>
+    <a routerLink="/products" class="btn-shop">Browse Products</a>
+  </div>
+
+  <!-- Cart Items -->
+  <div class="cart-container" *ngIf="cartItems.length > 0">
+    <div class="cart-items">
+      <div class="cart-item" *ngFor="let item of cartItems">
+        <div class="item-image">
+          <img
+            [src]="item.imageUrl || 'https://placehold.co/100x100?text=Product'"
+            [alt]="item.name"
+          />
+        </div>
+
+        <div class="item-details">
+          <span class="item-brand">{{ item.brand }}</span>
+          <h3>{{ item.name }}</h3>
+          <span class="item-price">₹{{ item.price }}</span>
+        </div>
+
+        <div class="item-qty">
+          <button (click)="decreaseQty(item)">−</button>
+          <span>{{ item.quantity }}</span>
+          <button (click)="increaseQty(item)">+</button>
+        </div>
+
+        <div class="item-total">
+          ₹{{ (item.price * item.quantity).toFixed(2) }}
+        </div>
+
+        <button class="btn-remove" (click)="removeItem(item)">🗑️</button>
+      </div>
+    </div>
+
+    <!-- Order Summary -->
+    <div class="order-summary">
+      <h2>Order Summary</h2>
+
+      <div class="summary-row">
+        <span>Items ({{ itemCount }})</span>
+        <span>₹{{ total.toFixed(2) }}</span>
+      </div>
+      <div class="summary-row">
+        <span>Shipping</span>
+        <span class="free">FREE</span>
+      </div>
+      <div class="summary-row discount" *ngIf="total > 1000">
+        <span>Discount (10%)</span>
+        <span>- ₹{{ (total * 0.1).toFixed(2) }}</span>
+      </div>
+
+      <div class="divider"></div>
+
+      <div class="summary-total">
+        <span>Total</span>
+        <span>₹{{ (total > 1000 ? total * 0.9 : total).toFixed(2) }}</span>
+      </div>
+
+      <p class="discount-hint" *ngIf="total <= 1000">
+        🎉 Add ₹{{ (1000 - total).toFixed(2) }} more for 10% off!
+      </p>
+
+      <a routerLink="/checkout" class="btn-checkout">
+        Proceed to Checkout →
+      </a>
+
+      <a routerLink="/products" class="btn-continue">
+        ← Continue Shopping
+      </a>
+    </div>
+  </div>
+</div>

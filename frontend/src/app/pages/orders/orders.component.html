@@ -1,0 +1,67 @@
+<div class="orders-page">
+  <h1>My Orders 📋</h1>
+
+  <!-- Loading -->
+  <div class="loading" *ngIf="loading">
+    <p>Loading your orders...</p>
+  </div>
+
+  <!-- Error -->
+  <div class="empty-state" *ngIf="!loading && errorMsg">
+    <div class="icon">⚠️</div>
+    <p>{{ errorMsg }}</p>
+  </div>
+
+  <!-- No Orders -->
+  <div class="empty-state" *ngIf="!loading && !errorMsg && orders.length === 0">
+    <div class="icon">📭</div>
+    <h2>No orders yet!</h2>
+    <p>Place your first order to see it here</p>
+    <a routerLink="/products" class="btn-shop">Start Shopping</a>
+  </div>
+
+  <!-- Orders List -->
+  <div class="orders-list" *ngIf="!loading && orders.length > 0">
+    <div class="order-card" *ngFor="let order of orders">
+
+      <div class="order-header">
+        <div class="order-id">
+          <span class="label">Order ID</span>
+          <span class="value">#{{ order.id.slice(-8).toUpperCase() }}</span>
+        </div>
+        <div class="order-date">
+          <span class="label">Placed On</span>
+          <span class="value">{{ order.createdAt | date:'dd MMM yyyy, h:mm a' }}</span>
+        </div>
+        <div class="order-status">
+          <span
+            class="status-badge"
+            [style.background]="getStatusColor(order.status) + '20'"
+            [style.color]="getStatusColor(order.status)"
+          >
+            {{ getStatusIcon(order.status) }} {{ order.status | titlecase }}
+          </span>
+        </div>
+      </div>
+
+      <div class="order-items">
+        <div class="order-item" *ngFor="let item of order.items">
+          <span class="item-name">{{ item.product?.name || 'Product' }}</span>
+          <span class="item-qty">× {{ item.quantity }}</span>
+          <span class="item-price">₹{{ (item.price * item.quantity).toFixed(2) }}</span>
+        </div>
+      </div>
+
+      <div class="order-footer">
+        <div class="shipping-address" *ngIf="order.shippingAddress">
+          📍 {{ order.shippingAddress.street }}, {{ order.shippingAddress.city }},
+          {{ order.shippingAddress.state }} - {{ order.shippingAddress.pincode }}
+        </div>
+        <div class="order-total">
+          Total: <strong>₹{{ order.totalAmount }}</strong>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
