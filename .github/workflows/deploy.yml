@@ -7,12 +7,11 @@ on:
 jobs:
   deploy:
     runs-on: ubuntu-latest
-
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
 
-      - name: Deploy to EC2 with GUID
+      - name: Deploy to EC2
         uses: appleboy/ssh-action@v1.0.3
         with:
           host: ${{ secrets.EC2_HOST }}
@@ -20,11 +19,10 @@ jobs:
           key: ${{ secrets.EC2_SSH_KEY }}
           script: |
             BUILD_ID=$(cat /proc/sys/kernel/random/uuid | cut -c1-8)
-            echo "Build ID: $BUILD_ID"
+            echo "✅ Build ID: $BUILD_ID"
             cd ~/mcart
             git pull origin main
-            sed -i "s/REPLACED_BY_CI/$BUILD_ID/g" frontend/src/environments/environment.ts
             sudo docker compose down
-            sudo docker compose up -d --build
-            sed -i "s/$BUILD_ID/REPLACED_BY_CI/g" frontend/src/environments/environment.ts
-            echo "✅ MCart deployed! Build: $BUILD_ID"
+            sudo docker build --build-arg BUILD_ID=$BUILD_ID -t mcart-frontend ./frontend
+            sudo docker compose up -d
+            echo "✅ Deployed! Build: $BUILD_ID"
