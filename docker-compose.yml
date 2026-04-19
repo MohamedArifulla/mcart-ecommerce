@@ -19,7 +19,7 @@ services:
   backend:
     build: ./backend
     ports:
-      - "3001:3000"    # ✅ 3001 use pannunga — conflict avoid
+      - "3001:3000"
     environment:
       DB_HOST: postgres
       DB_PORT: 5432
@@ -28,6 +28,8 @@ services:
       DB_NAME: mcart
       JWT_SECRET: mcart_super_secret_key
       NODE_ENV: production
+      STRIPE_SECRET_KEY: sk_test_51TDv4jC0nd4rfuRN4XrJZPKX6KEOZJecSa08VmHG6UqAvJflA0oo6Mjos6RGoQ1drHVkNTKGS8xJBtMx7gY8sM2S009fOIPsWa
+      STRIPE_PUBLISHABLE_KEY: pk_test_51TDv4jC0nd4rfuRNiNAIhlIvQAudw3Tim9Mv5C29NlSVbGfvDRMi54dPFxrtXxhjHzka3MzYGBp0jbXRL9ouA22l00atkIk9lZ
     depends_on:
       postgres:
         condition: service_healthy
