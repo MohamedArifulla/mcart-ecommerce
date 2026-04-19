@@ -27,6 +27,7 @@ services:
       DB_PASSWORD: mcart_pass
       DB_NAME: mcart
       JWT_SECRET: mcart_super_secret_key
+      JWT_EXPIRES_IN: 7d
       NODE_ENV: production
       STRIPE_SECRET_KEY: ${STRIPE_SECRET_KEY}
       STRIPE_PUBLISHABLE_KEY: ${STRIPE_PUBLISHABLE_KEY}

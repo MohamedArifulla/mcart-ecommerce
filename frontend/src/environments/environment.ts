@@ -1,5 +1,5 @@
 export const environment = {
   production: false,
   apiUrl: '/api',
-  buildId: 'REPLACED_BY_CI'
+  buildId: 'demo-1234'
 };
